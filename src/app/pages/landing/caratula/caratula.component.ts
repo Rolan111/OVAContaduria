@@ -13,35 +13,59 @@ export class CaratulaComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit(): void {
-
-
 		this.caratulaForm = new FormGroup({
-			data: new FormArray([
-				new FormGroup({
-					key: new FormControl(''),
-					value: new FormControl('')
-				})
-			])
+			data: new FormArray([])
 		});
 
-
 		let data = <FormArray>this.caratulaForm.controls['data'];
-		data.push(
-			new FormGroup({
-				key: new FormControl(''),
-				value: new FormControl('')
-			})
-		);
-		data.push(
-			new FormGroup({
-				key: new FormControl(''),
-				value: new FormControl('')
-			})
-		);
+		for (let index = 1; index <= 184; index++) {
+			data.push(
+				new FormGroup({
+					name: new FormControl({
+						value: 'Campo de descripcion '+index
+					}),
+					c1: new FormControl(''),
+					c2: new FormControl(''),
+					c3: new FormControl(''),
+					c4: new FormControl(''),
+					c5: new FormControl(''),
+					comment: new FormControl('')
+				})
+			);
+		}
 	}
 
-	clic(){
+	showData() {
 		console.log(this.caratulaForm.value);
+	}
+
+	sumData() {
+		console.log(this.caratulaForm.value);
+
+		let data = <FormArray>this.caratulaForm.controls['data'];
+
+		var totalSumC1: number = 0;
+		var totalSumC2: number = 0;
+
+		data.controls.forEach(element => {
+			let tempRowC1: number = Number.parseInt(element.value['c1']);
+			let tempRowC2: number = Number.parseInt(element.value['c2']);
+
+			if (!Number.isNaN(tempRowC1)) {
+				totalSumC1 += tempRowC1;
+			}
+			if (!Number.isNaN(tempRowC2)) {
+				totalSumC2 += tempRowC2;
+			}
+
+		});
+
+		console.log("Columna 1: " + totalSumC1);
+		console.log("Columna 2: " + totalSumC2);
+	}
+
+	getData(item:any){
+		console.log(item);
 	}
 }
 

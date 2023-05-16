@@ -1,29 +1,44 @@
-<mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+<mat-toolbar color="white">
+	<mat-toolbar-row>
+		<img height="60" src="assets/images/Logo_UCC.png">
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<mat-tab-group mat-stretch-tabs mat-align-tabs="center" animationDuration="0ms">
 	<mat-tab label="2516 Caratula">
+		<br>
 		<app-caratula></app-caratula>
 	</mat-tab>
 	<mat-tab label="2516 (ESF - Patrimonio)">
+		<br>
 		<app-patrimonio></app-patrimonio>
 	</mat-tab>
 	<mat-tab label="H3 (ERI - Renta Liquida)">
+		<br>
 		<app-renta-liquida></app-renta-liquida>
 	</mat-tab>
 	<mat-tab label="H4 (Impuestos Diferido)">
+		<br>
 		<app-impuestos-diferidos></app-impuestos-diferidos>
 	</mat-tab>
 	<mat-tab label="H5 (Ingreso y Facturacion)">
+		<br>
 		<app-ingreso-y-facturacion></app-ingreso-y-facturacion>
 	</mat-tab>
 	<mat-tab label="H6 (Activos fijos)">
+		<br>
 		<app-activos-fijos></app-activos-fijos>
 	</mat-tab>
 	<mat-tab label="H7 (Resumen ESF - ERI)">
+		<br>
 		<app-resumen></app-resumen>
 	</mat-tab>
 	<mat-tab label="detalle renglones del 110">
+		<br>
 		<app-detalle-renglones></app-detalle-renglones>
 	</mat-tab>
 	<mat-tab label="Formulario110">
+		<br>
 		<app-formulario110></app-formulario110>
 	</mat-tab>
 </mat-tab-group>
