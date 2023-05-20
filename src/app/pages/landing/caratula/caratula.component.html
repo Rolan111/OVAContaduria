@@ -6,7 +6,7 @@
 			<tr *ngFor="let item of caratulaForm.get('data')['controls']; let i = index;" formGroupName="{{i}}">
 				
 					<th>{{i +1}}</th>
-					<th>Nombre de {{item.value.name.value}} </th>
+					<th>Nombre de {{item.value.name}} </th>
 					<th><input type="number" formControlName="c1"></th>
 					<th><input type="number" formControlName="c2"></th>
 					<th><input type="number" formControlName="c3"></th>
@@ -22,4 +22,6 @@
 
 	<button mat-flat-button color="primary" (click)="showData()">Mostrar Datos</button> 
 	<button mat-flat-button color="accent" (click)="sumData()">Sumar Datos</button>
+	<button mat-flat-button color="accent" (click)="import()">Import</button>
+	<button mat-flat-button color="accent" (click)="export()">Export</button>
 </form>
