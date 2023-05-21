@@ -1,12 +1,12 @@
+Numero usuario: <input [(ngModel)]="idUsuario" type="number"><button (click)="load()" type="button" color="primary">Cargar</button>
+
 <form [formGroup]="caratulaForm">
-
 	<div formArrayName="data">
-
 		<table>
 			<tr *ngFor="let item of caratulaForm.get('data')['controls']; let i = index;" formGroupName="{{i}}">
 				
 					<th>{{i +1}}</th>
-					<th>Nombre de {{item.value.name}} </th>
+					<th>{{item.value.name}}</th>
 					<th><input type="number" formControlName="c1"></th>
 					<th><input type="number" formControlName="c2"></th>
 					<th><input type="number" formControlName="c3"></th>
@@ -22,6 +22,5 @@
 
 	<button mat-flat-button color="primary" (click)="showData()">Mostrar Datos</button> 
 	<button mat-flat-button color="accent" (click)="sumData()">Sumar Datos</button>
-	<button mat-flat-button color="accent" (click)="import()">Import</button>
-	<button mat-flat-button color="accent" (click)="export()">Export</button>
+	<button mat-flat-button color="accent" (click)="save()">Guardar</button>
 </form>
