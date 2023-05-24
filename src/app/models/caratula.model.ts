@@ -1,13 +1,14 @@
 export interface CaraturaModel{
-  name: ItemModel;
-  c1: number;
-  c2: number;
-  c3: number;
-  c4: number;
-  c5: number;
-  comment: string;
+
+	name: ItemModel;
+	c1: number;
+	c2: number;
+	c3: number;
+	c4: number;
+	c5: number;
+	comment: string;
 }
 
 export interface ItemModel{
-  value: string;
+	value: string;
 }
