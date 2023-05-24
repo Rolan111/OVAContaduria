@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "OVAContaduria"
+  "defaultProject": "OVAContaduria",
+  "cli": {
+    "analytics": "4393d9ac-6782-4e65-b781-4b34efca674d"
+  }
 }
