@@ -1,7 +1,8 @@
 export class DataModel{
 
-	id: number;
+	id_data: number;
 	idUsuario: number;
 	jsonPatrimonio: string;
+	jsonRentaLiquida: string;
 
 }

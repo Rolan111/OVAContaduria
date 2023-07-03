@@ -1,3 +1,5 @@
+<button (click)="recopilacionDeTodosFormularios()">Recopilar informacion</button>
+
 <mat-toolbar color="white">
 	<mat-toolbar-row>
 		<img height="60" src="assets/images/Logo_UCC.png">
@@ -5,14 +7,17 @@
 </mat-toolbar>
 
 <mat-tab-group mat-stretch-tabs mat-align-tabs="center" animationDuration="0ms">
-	<mat-tab label="2516 Caratula">
+
+	<mat-tab label="2516 Caratula" [ngStyle]="{ 'background-color': '#ff0000' }">
 		<br>
-		<app-caratula></app-caratula>
+<!--		<app-caratula></app-caratula>-->
 	</mat-tab>
+
 	<mat-tab label="2516 (ESF - Patrimonio)">
 		<br>
 		<app-patrimonio></app-patrimonio>
 	</mat-tab>
+
 	<mat-tab label="H3 (ERI - Renta Liquida)">
 		<br>
 		<app-renta-liquida></app-renta-liquida>
