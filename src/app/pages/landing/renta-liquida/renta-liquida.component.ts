@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {DataModel} from '../../../models/data.model';
 import {DataService} from '../../../services/data.service';
 import {CaraturaModel} from '../../../models/caratula.model';
 import {FormDataService} from '../../../services/form-data.service';
+import {PatrimonioModel} from '../../../models/patrimonio.model';
 
 @Component({
 	selector: 'app-renta-liquida',
@@ -13,62 +14,58 @@ import {FormDataService} from '../../../services/form-data.service';
 })
 export class RentaLiquidaComponent implements OnInit {
 
-  public caratulaForm: FormGroup;
+  @Output() enviandoEstadoFormularioGuardado = new EventEmitter<boolean>();
+  @Input() recibiendoCargaDBRentaLiquida:PatrimonioModel[]
+
+  public rentaLiquidaForm: FormGroup;
   public idUsuario: number = 1;
+  contador=0;
 
   private dataModel: DataModel;
 
   constructor(private dataService: DataService,
-              private formDataService: FormDataService) { }
+              private formDataService: FormDataService) {
+    this.rentaLiquidaForm = new FormGroup({ data: new FormArray([]) });
+  }
 
   ngOnInit(): void {
-    this.load();
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Aquí puedes detectar los cambios en la variable de entrada
+    if (changes.recibiendoCargaDBRentaLiquida) {
+      const newValue = changes.recibiendoCargaDBRentaLiquida.currentValue;
+      console.log('Se detectó un cambio en la variable de entrada:', newValue);
+      if (this.contador==1){
+        this.load()
+        this.contador=0
+      }
+    }
+    this.contador = this.contador+1
   }
 
   load() {
-    this.caratulaForm = new FormGroup({ data: new FormArray([]) });
+    let data = <FormArray>this.rentaLiquidaForm.controls['data'];
+    data.clear()
+    let jsonParse:PatrimonioModel[] = this.recibiendoCargaDBRentaLiquida; //Aqui se convierte la cadena de texto almacenada en DB a un objeto JSON
 
-    this.dataService.findByIdUsuario(this.idUsuario).toPromise().then(result => { //consulta al servicio
-      let data = <FormArray>this.caratulaForm.controls['data'];
-      this.dataModel = new DataModel(); //variable
+    console.log('Los datos de json parse son: ',jsonParse);
+    console.log('La longitud del Json es: ',jsonParse.length);
 
-      if(result){
-        //Si existe entonces: cargar datos en variable
-        this.dataModel = result;
-        let jsonParse: CaraturaModel[] = JSON.parse(result.jsonPatrimonio); //Aqui se convierte la cadena de texto almacenada en DB a un objeto JSON
-
-        for (let index = 0; index < jsonParse.length; index++) {
-          data.push(
-            new FormGroup({
-              name: new FormControl('Campo: ' + (index + 1)),
-              c1: new FormControl(jsonParse[index].c1),
-              c2: new FormControl(jsonParse[index].c2),
-              c3: new FormControl(jsonParse[index].c3),
-              c4: new FormControl(jsonParse[index].c4),
-              c5: new FormControl(jsonParse[index].c5),
-              comment: new FormControl(jsonParse[index].comment)
-            })
-          );
-        }
-      }else{
-        for (let index = 0; index < 10; index++) {
-          data.push(
-            new FormGroup({
-              name: new FormControl('Campo: ' + (index + 1)),
-              c1: new FormControl(""),
-              c2: new FormControl(""),
-              c3: new FormControl(""),
-              c4: new FormControl(""),
-              c5: new FormControl(""),
-              comment: new FormControl("")
-            })
-          );
-        }
-      }
-    }).catch(exception =>{
-      console.log("Error: "+ exception);
-      alert("Error: "+ exception);
-    });
+    for (let index = 0; index < jsonParse.length; index++) {
+      data.push(
+        new FormGroup({
+          name: new FormControl('Campo: ' + (index + 1)),
+          c1: new FormControl(jsonParse[index].c1),
+          c2: new FormControl(jsonParse[index].c2),
+          c3: new FormControl(jsonParse[index].c3),
+          c4: new FormControl(jsonParse[index].c4),
+          c5: new FormControl(jsonParse[index].c5),
+          comment: new FormControl(jsonParse[index].comment)
+        })
+      );
+    }
   }
 
   save() {
@@ -85,8 +82,7 @@ export class RentaLiquidaComponent implements OnInit {
     }
 
     //actualizar info data temporal
-    // dataModelUpdate.jsonPatrimonio = JSON.stringify(this.caratulaForm.value.data);
-    dataModelUpdate.jsonRentaLiquida = JSON.stringify(this.caratulaForm.value.data);
+    dataModelUpdate.jsonPatrimonio = JSON.stringify(this.rentaLiquidaForm.value.data);
 
     this.dataService.save(dataModelUpdate).toPromise().then(result => {
 
@@ -99,17 +95,26 @@ export class RentaLiquidaComponent implements OnInit {
     });
   }
 
-  guardadoEnServicio2(){
-    this.formDataService.setFormData2(this.caratulaForm);
+  /** OJO: Una vez se guarda por primera vez, entonces se dispara el servicio que detecta NUEVOS CAMBIOS dentro del formulario */
+  guardadoEnServicio(){
+    this.formDataService.setFormData3(this.rentaLiquidaForm);
+    this.enviandoEstadoFormularioGuardado.emit(true)
+
+    this.rentaLiquidaForm.valueChanges.subscribe((value) => { //INICIO servicio
+      // Aquí puedes realizar acciones cuando haya cambios en el formulario
+      console.log('Se detectó un cambio en el formulario', value.data);
+      this.enviandoEstadoFormularioGuardado.emit(false)
+    });
   }
 
+  //OTRAS Funciones
+
   showData() {
-    console.log(this.caratulaForm.value.data);
+    console.log(this.rentaLiquidaForm.value.data);
   }
 
   sumData() {
-    let data = <FormArray>this.caratulaForm.controls['data'];
-
+    let data = <FormArray>this.rentaLiquidaForm.controls['data'];
     //Suma completo de columnas
     var totalSumC1: number = 0;
     var totalSumC2: number = 0;
@@ -145,8 +150,8 @@ export class RentaLiquidaComponent implements OnInit {
 
     console.log('*** Resultados suma Filas ***');
     // Suma de Fila 1, es decir la posicion 0
-    totalSumF1 = this.caratulaForm.value.data[0].c1 + this.caratulaForm.value.data[0].c2 + this.caratulaForm.value.data[0].c3 + this.caratulaForm.value.data[0].c4;
-    totalSumF2 = this.caratulaForm.value.data[1].c1 + this.caratulaForm.value.data[1].c2 + this.caratulaForm.value.data[1].c3 + this.caratulaForm.value.data[1].c4;
+    totalSumF1 = this.rentaLiquidaForm.value.data[0].c1 + this.rentaLiquidaForm.value.data[0].c2 + this.rentaLiquidaForm.value.data[0].c3 + this.rentaLiquidaForm.value.data[0].c4;
+    totalSumF2 = this.rentaLiquidaForm.value.data[1].c1 + this.rentaLiquidaForm.value.data[1].c2 + this.rentaLiquidaForm.value.data[1].c3 + this.rentaLiquidaForm.value.data[1].c4;
     console.log('La suma de la fila 1 es: ', totalSumF1);
     console.log('La suma de la fila 2 es: ', totalSumF2);
 

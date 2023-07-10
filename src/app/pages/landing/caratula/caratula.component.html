@@ -1,0 +1,32 @@
+
+<!--{{recibiendoCargaDBCaratula | json}}-->
+<!--Numero usuario: <input [(ngModel)]="idUsuario" type="number"><button (click)="loadPrueba()" type="button" color="primary">Cargar</button>-->
+
+<form [formGroup]="caratulaForm">
+
+  <div formArrayName="data"> <!-- Formulario HIJO -->
+    <table>
+      <!--      con "controls" se accede a cada uno de sus hijos. Con "formGroupName" se accede a las propiedades del formulario hijo -->
+      <tr *ngFor="let item of caratulaForm.get('data')['controls']; let i = index;" formGroupName="{{i}}">
+
+        <th>{{i +1}}</th>
+        <th>{{item.value.name}}</th>
+        <th><input type="number" formControlName="c1"></th>
+        <th><input type="number" formControlName="c2"></th>
+        <th><input type="number" formControlName="c3"></th>
+        <th><input type="number" formControlName="c4"></th>
+        <th><input type="number" formControlName="c5"></th>
+
+        <th><input type="text" placeholder="Comentario" formControlName="comment"></th>
+
+        <button (click)="getData(item)">Datos</button><!-- solo para capturar una fila -->
+      </tr>
+    </table>
+
+  </div>
+
+  <button mat-flat-button color="primary" (click)="showData()">Mostrar Datos (en Consola)</button>
+  <button mat-flat-button color="accent" (click)="sumData()">Sumar Datos (en Consola)</button>
+  <!--  <button mat-flat-button color="accent" (click)="save()">Guardar Patrimonio</button>-->
+  <button mat-flat-button color="accent" (click)="guardadoEnServicio()">Guardar Caratula (Local)</button>
+</form>

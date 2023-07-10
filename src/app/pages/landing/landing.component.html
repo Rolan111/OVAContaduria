@@ -1,4 +1,13 @@
-<button (click)="recopilacionDeTodosFormularios()">Recopilar informacion</button>
+<div style="margin-top: 7px">
+  <button (click)="recopilacionDeTodosFormulariosYEnvio()" mat-raised-button class="probando">Recopilar toda la informacion y ENVIAR</button>
+</div>
+
+<br>
+<div>
+<!--   <p>Formulario patrimonio guardado? {{recibiendoFormularioPatrimonio}}</p>-->
+  Numero usuario Global: <input [(ngModel)]="idUsuario" type="number"><button (click)="load()" type="button" color="primary">Cargar</button>
+</div>
+
 
 <mat-toolbar color="white">
 	<mat-toolbar-row>
@@ -8,20 +17,30 @@
 
 <mat-tab-group mat-stretch-tabs mat-align-tabs="center" animationDuration="0ms">
 
-	<mat-tab label="2516 Caratula" [ngStyle]="{ 'background-color': '#ff0000' }">
-		<br>
-<!--		<app-caratula></app-caratula>-->
+  <mat-tab>
+    <br>
+    <ng-template mat-tab-label>
+      <div [ngStyle]="estilosCaratula">2516 Caratula</div>
+    </ng-template>
+    <app-caratula (enviandoEstadoFormularioGuardado)="recibiendoEstadosFormularios = $event;cambioEstilosCaratula()"  [recibiendoCargaDBCaratula]="enviadoCargaCaratula"></app-caratula>
+  </mat-tab>
+
+	<mat-tab>
+    <br>
+    <ng-template mat-tab-label>
+      <div [ngStyle]="estilosPatrimonio">2516 (ESF - Patrimonio)</div>
+    </ng-template>
+		<app-patrimonio (enviandoEstadoFormularioGuardado)="recibiendoEstadosFormularios = $event;cambioEstilosPatrimonio()" [recibiendoCargaDBPatrimonio]="enviadoCargaPatrimonio"></app-patrimonio>
 	</mat-tab>
 
-	<mat-tab label="2516 (ESF - Patrimonio)">
+	<mat-tab>
 		<br>
-		<app-patrimonio></app-patrimonio>
+    <ng-template mat-tab-label>
+      <div [ngStyle]="estilosRentaLiquida">H3 (ERI - Renta Liquida)</div>
+    </ng-template>
+    <app-renta-liquida (enviandoEstadoFormularioGuardado)="recibiendoEstadosFormularios = $event;cambioEstilosRentaLiquida()" [recibiendoCargaDBRentaLiquida]="enviadoCargaRentaLiquida"></app-renta-liquida>
 	</mat-tab>
 
-	<mat-tab label="H3 (ERI - Renta Liquida)">
-		<br>
-		<app-renta-liquida></app-renta-liquida>
-	</mat-tab>
 	<mat-tab label="H4 (Impuestos Diferido)">
 		<br>
 		<app-impuestos-diferidos></app-impuestos-diferidos>

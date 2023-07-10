@@ -9,7 +9,9 @@ export class FormDataService {
 
   private formData1: any;
   private formData2: any;
+  private formData3: any;
 
+  //setters
   setFormData1(data: any) {
     this.formData1 = data;
   }
@@ -18,6 +20,12 @@ export class FormDataService {
     this.formData2 = data;
   }
 
+  setFormData3(data: any) {
+    this.formData3 = data;
+  }
+
+
+  //getters
   getFormData1() {
     return this.formData1;
   }
@@ -25,5 +33,10 @@ export class FormDataService {
   getFormData2() {
     return this.formData2;
   }
+
+  getFormData3() {
+    return this.formData3;
+  }
+
 
 }
